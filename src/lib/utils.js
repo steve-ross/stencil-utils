@@ -7,13 +7,13 @@ const queryString = require('query-string');
  * @returns {string} Normalized querystring
  */
 export function normalizeQueryStringParams(params) {
-    const qsParams = queryString.parse(params, { arrayFormat: 'index' });
-
+  
+    const qsParams = queryString.parse(params);
     const optionsCollection = Object.keys(qsParams).reduce((normalized, key) => {
         let param;
 
         if (qsParams[key] instanceof Array) {
-            const filtered = qsParams[key].filter((item) => (item !== '' && item !== undefined));
+            const filtered = qsParams[key].filter((item) => (item !== '' || item !== undefined));
             param = { [key]: filtered };
         } else {
             param = { [key]: qsParams[key] };
@@ -22,6 +22,7 @@ export function normalizeQueryStringParams(params) {
         return Object.assign({}, normalized, param);
     }, {});
 
-    const paramString = queryString.stringify(optionsCollection, { arrayFormat: 'index' });
+
+    const paramString = queryString.stringify(optionsCollection);
     return paramString;
 }
